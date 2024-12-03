@@ -1,0 +1,24 @@
+# Byte-compiled files
+*.pyc
+*.pyo
+__pycache__/
+
+# Virtual environment
+venv/
+env/
+
+# Django stuff
+db.sqlite3
+*.log
+
+# Media and static files
+/media/
+/staticfiles/
+
+# VS Code, PyCharm, and other IDEs
+.vscode/
+.idea/
+
+# System files
+.DS_Store
+Thumbs.db
