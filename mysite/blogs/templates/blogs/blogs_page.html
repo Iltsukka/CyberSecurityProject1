@@ -1,1 +1,6 @@
 <h1>Here is gonnna be some great content in the future</h1>
+
+<form action="{% url 'blogs:logout_page' %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="logout"/>
+</form>

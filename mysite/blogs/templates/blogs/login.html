@@ -1,1 +1,8 @@
 <h2>login</h2>
+
+<form action="{% url 'blogs:login_page' %}" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Login"/>
+
+</form>
