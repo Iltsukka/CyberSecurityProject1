@@ -1,6 +1,22 @@
-<h1>Here is gonnna be some great content in the future</h1>
+<h1>Read and comment different posts</h1>
 
 <form action="{% url 'blogs:logout_page' %}" method="POST">
     {% csrf_token %}
     <input type="submit" value="logout"/>
+</form>
+<h2>Current posts by all users</h2>
+<ul>
+    {% for post in blogs %}
+    <li>
+        <div>{{post.blog_title}}</div>
+        <div>{{post.blog_content}}</div>
+    </li>
+    <br></br>
+    {% endfor %}
+</ul>
+<h3>Create your own post</h3>
+<form action="{% url 'blogs:blogs_page' %}" method="POST">
+    {% csrf_token %}
+    {{form}}
+    <input type="submit" value="publish"/>
 </form>

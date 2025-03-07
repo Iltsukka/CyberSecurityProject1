@@ -1,11 +1,12 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm, LoginForm
+from .forms import RegisterForm, LoginForm, NewPostForm
 from django.urls import reverse
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
 from . models import Blogpost, Comment, CustomUser
 from django.contrib.auth import authenticate, login, logout
+from django.utils import timezone
 
 def home(request):
     return render(request, 'blogs/index.html')
@@ -54,7 +55,18 @@ def login_page(request):
 #fix is to add a @login_required decorator that redirects non logged in users to login page
 #@login_required
 def blogs_page(request):
-    return render(request, 'blogs/blogs_page.html')
+    if request.method=='POST':
+        form = NewPostForm(request.POST)
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+            post = Blogpost.objects.create(blog_title=title, blog_content=content, pub_date=timezone.now())
+            return redirect('blogs:blogs_page')
+
+        
+    form = NewPostForm()
+    blogs = Blogpost.objects.all()
+    return render(request, 'blogs/blogs_page.html', {"form":form, "blogs":blogs})
 
 
 def logout_page(request):
