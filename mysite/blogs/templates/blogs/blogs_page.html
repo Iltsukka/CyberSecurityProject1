@@ -4,12 +4,15 @@
     {% csrf_token %}
     <input type="submit" value="logout"/>
 </form>
-<h2>Current posts by all users</h2>
+<h2>Current posts by all users (showing only latest 3 posts)</h2>
 <ul>
     {% for post in blogs %}
     <li>
-        <div>{{post.blog_title}}</div>
-        <div>{{post.blog_content}}</div>
+        <!-- Here is an example of XSS vulnerability caused by using safe keyword
+         Removing the keyword fixes the problem --> 
+        <div>{{post.blog_title |safe}}</div>
+        <div>{{post.blog_content |safe}}</div>
+        <a href="{% url 'blogs:blog_detail' post.id %}">view and add comments</a>
     </li>
     <br></br>
     {% endfor %}

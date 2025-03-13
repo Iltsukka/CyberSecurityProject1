@@ -27,6 +27,8 @@ DEBUG = True
 
 LOGIN_URL = 'blogs:login_page'
 
+# AXES_ENABLED = True
+
 ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'blogs.CustomUser'
@@ -35,7 +37,6 @@ AUTH_USER_MODEL = 'blogs.CustomUser'
 # Application definition
 
 INSTALLED_APPS = [
-    'polls.apps.PollsConfig',
     'blogs.apps.BlogsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -43,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #'axes',
 ]
 
 MIDDLEWARE = [
@@ -53,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    #'axes.middleware.AxesMiddleware',
 ]
 
 ROOT_URLCONF = 'mysite.urls'
@@ -104,6 +107,18 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+# AUTHENTICATION_BACKENDS = [
+#    'axes.backends.AxesBackend',  # Axes brute-force protection
+#    'django.contrib.auth.backends.ModelBackend',  # Default authentication
+#]
+
+# AXES_FAILURE_LIMIT = 5  # Lock out after 5 failed attempts
+# AXES_COOLOFF_TIME = 1  # Lockout duration (1 hour)
+# AXES_LOCKOUT_CALLABLE = None  # Default lockout behavior
+# AXES_RESET_ON_SUCCESS = True  # Reset failed attempts on successful login
+
+
 
 
 # Internationalization

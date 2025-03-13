@@ -1,0 +1,19 @@
+<a href="{% url 'blogs:blogs_page' %}">Back to home page</a>
+<h1>Add a comment to post</h1>
+<h2>Title: {{blog.blog_title}}</h2>
+<div>Content: {{blog.blog_content}}</div>
+<div>Comments:</div>
+<div>
+    <ul>
+        {% for comment in blog.comment_set.all %}
+        <li>{{comment}}</li>
+        {% endfor %}
+    </ul>
+</div>
+<br/>
+<form action="{% url 'blogs:add_comment' blog.id %}" method="POST">
+    {% csrf_token %}
+    <div>Add new comment</div>
+    {{form}}
+    <input type="submit" value="Comment"/>
+</form>

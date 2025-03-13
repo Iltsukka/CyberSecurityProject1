@@ -1,12 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm, LoginForm, NewPostForm
+from .forms import RegisterForm, LoginForm, NewPostForm, NewCommentForm
 from django.urls import reverse
 # Create your views here.
 from django.http import HttpResponse, HttpResponseRedirect
 from . models import Blogpost, Comment, CustomUser
 from django.contrib.auth import authenticate, login, logout
 from django.utils import timezone
+from django.db import connection
 
 def home(request):
     return render(request, 'blogs/index.html')
@@ -66,6 +67,9 @@ def blogs_page(request):
         
     form = NewPostForm()
     blogs = Blogpost.objects.all()
+    if len(blogs) < 4:
+        return render(request, 'blogs/blogs_page.html', {"form":form, "blogs":blogs})
+    blogs = blogs[(len(blogs) - 3):]
     return render(request, 'blogs/blogs_page.html', {"form":form, "blogs":blogs})
 
 
@@ -73,3 +77,25 @@ def logout_page(request):
     if request.method == 'POST':
         logout(request)
         return HttpResponseRedirect(reverse('blogs:home'))
+    
+@login_required   
+def blog_detail(request, id):
+    blog = Blogpost.objects.get(id=id)
+    form = NewCommentForm()
+    return render(request, 'blogs/blog_detail.html', {'blog':blog, 'form':form})
+
+def add_comment(request, id):
+    print('id is ', id)
+    if request.method=='POST':
+        form = NewCommentForm(request.POST)
+        if form.is_valid():
+            print('form is valid')
+            comment = form.cleaned_data["comment"]
+            # the line below is vulnerable to SQL injection as user can input executable sql code in and cause trouble
+            connection.cursor().execute(f"INSERT INTO blogs_comment (blogpost_id, comment) VALUES ({id}, '{comment}')")
+            # best practice is to use parameterized quaries where input data is not executable and safe to add to quary
+            # FIX: connection.cursor().execute("INSERT INTO blogs_comment (blogpost_id, comment, likes) VALUES (%s, %s, %s)", [id, comment, 0])
+            # Alternatively Django ORM can be used for safe quarying
+            return redirect('blogs:blog_detail', id=id)
+    return redirect('blogs:blog_detail', id=id)
+    

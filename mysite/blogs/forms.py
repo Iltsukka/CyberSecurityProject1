@@ -10,3 +10,6 @@ class LoginForm(forms.Form):
 class NewPostForm(forms.Form):
     title = forms.CharField(max_length=50)
     content = forms.CharField(widget=forms.Textarea)
+
+class NewCommentForm(forms.Form):
+    comment = forms.CharField(widget=forms.Textarea)

@@ -18,6 +18,6 @@ class Blogpost(models.Model):
 class Comment(models.Model):
     blogpost = models.ForeignKey(Blogpost, on_delete=models.CASCADE)
     comment = models.TextField()
-    likes = models.IntegerField(default=0)
+    # likes = models.IntegerField(default=0)
     def __str__(self):
         return self.comment
