@@ -94,7 +94,7 @@ def add_comment(request, id):
             # the line below is vulnerable to SQL injection as user can input executable sql code in and cause trouble
             connection.cursor().execute(f"INSERT INTO blogs_comment (blogpost_id, comment) VALUES ({id}, '{comment}')")
             # best practice is to use parameterized quaries where input data is not executable and safe to add to quary
-            # FIX: connection.cursor().execute("INSERT INTO blogs_comment (blogpost_id, comment, likes) VALUES (%s, %s, %s)", [id, comment, 0])
+            # FIX: connection.cursor().execute("INSERT INTO blogs_comment (blogpost_id, comment) VALUES (%s, %s)", [id, comment])
             # Alternatively Django ORM can be used for safe quarying
             return redirect('blogs:blog_detail', id=id)
     return redirect('blogs:blog_detail', id=id)
